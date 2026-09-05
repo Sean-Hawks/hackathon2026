@@ -1,3 +1,15 @@
+# OpenAI 已讀不回計時器（Fork）
+
+> 本 repo fork 自 SITCON 的 [sitcon-tw/hackathon2026](https://github.com/sitcon-tw/hackathon2026)，感謝 SITCON 團隊開源 BUILD MODE 2026 資訊站。
+> 新增的 `openai-countdown.html` 以原站 `countdown.html` 為基底改成紅色主視覺，並把作品繳交倒數改成「ChatGPT Pro 5x 名單送出後，OpenAI 已經多久沒回信」的正數計時器（自 2026/09/01 00:00 GMT+8 起算）。
+>
+> 線上版：<https://sean-hawks.github.io/hackathon2026/openai-countdown.html>
+>
+> 網址參數：`?replied=2026-09-06T10:00:00+08:00` 停止計時並顯示「OpenAI 回信了」；`?sent=`、`?url=`、`?title=` 可覆蓋起算時間、QR 連結與主標。
+> 原站 CNAME 已移除，避免與 hackathon2026.sitcon.org 衝突。其餘檔案維持原樣，以下為原 README。
+
+---
+
 # BUILDMODE GEN-AI HACKATHON 2026 資訊站
 
 無框架、無建置步驟的靜態網站。以任一靜態檔案伺服器發布專案根目錄即可。頁面透過 jsDelivr 載入 Anime.js 4.2.2；若套件載入失敗，所有資訊與主要互動仍可正常使用。
