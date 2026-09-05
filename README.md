@@ -3,7 +3,11 @@
 > 本 repo fork 自 SITCON 的 [sitcon-tw/hackathon2026](https://github.com/sitcon-tw/hackathon2026)，感謝 SITCON 團隊開源 BUILD MODE 2026 資訊站。
 > 新增的 `openai-countdown.html` 以原站 `countdown.html` 為基底改成紅色主視覺，並把作品繳交倒數改成「ChatGPT Pro 5x 名單送出後，OpenAI 已經多久沒回信」的正數計時器（自 2026/09/01 00:00 GMT+8 起算）。
 >
-> 線上版：<https://sean-hawks.github.io/hackathon2026/openai-countdown.html>
+> 線上版：<https://openai-reply.observe.tw/>
+>
+> GitHub Pages 原址：<https://sean-hawks.github.io/hackathon2026/openai-countdown.html>
+>
+> 網域部署與 GA4／GTM 設定：[部署說明](deploy/openai-reply/README.md)
 >
 > 網址參數：`?replied=2026-09-06T10:00:00+08:00` 停止計時並顯示「OpenAI 回信了」；`?sent=`、`?url=`、`?title=` 可覆蓋起算時間、QR 連結與主標。
 > 原站 CNAME 已移除，避免與 hackathon2026.sitcon.org 衝突。其餘檔案維持原樣，以下為原 README。

@@ -1,0 +1,7 @@
+{
+  "name": "openai-reply",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-09-05",
+  "account_id": "08f074fca6db8519f744f2a2675a2693",
+  "routes": [{ "pattern": "openai-reply.observe.tw", "custom_domain": true }]
+}
