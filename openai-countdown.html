@@ -529,6 +529,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   .footer-bar { color: rgba(255, 255, 255, .28); font-family: "SFMono-Regular", Consolas, monospace; font-size: 9px; letter-spacing: .22em; }
   .footer-bar strong { color: var(--accent); font-weight: 900; }
+  .footer-bar .repo-link { color: inherit; text-decoration: none; border-bottom: 1px dotted rgba(255, 255, 255, .18); transition: color .3s, border-color .3s; }
+  .footer-bar .repo-link:hover { color: var(--accent); border-color: var(--accent); }
 
   .final-overlay,
   .phase-impact { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; pointer-events: none; }
@@ -681,7 +683,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <footer class="footer-bar">
     <span><strong>LIVE</strong> // OPENAI REPLY MONITORING SYSTEM</span>
-    <span>Pro 5x 不會自己長出來</span>
+    <span>Pro 5x 不會自己長出來 // <a class="repo-link" href="https://github.com/Sean-Hawks/hackathon2026" target="_blank" rel="noopener">等信無聊的話，一人一顆星星支持 ★</a></span>
   </footer>
 </main>
 
