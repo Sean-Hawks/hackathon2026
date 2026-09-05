@@ -529,8 +529,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   .footer-bar { color: rgba(255, 255, 255, .28); font-family: "SFMono-Regular", Consolas, monospace; font-size: 9px; letter-spacing: .22em; }
   .footer-bar strong { color: var(--accent); font-weight: 900; }
-  .footer-bar .repo-link { color: inherit; text-decoration: none; border-bottom: 1px dotted rgba(255, 255, 255, .18); transition: color .3s, border-color .3s; }
-  .footer-bar .repo-link:hover { color: var(--accent); border-color: var(--accent); }
+  .footer-bar .repo-link { display: inline-flex; align-items: center; gap: 6px; padding: 4px 9px; color: rgba(255, 255, 255, .72); text-decoration: none; border: 1px solid rgba(var(--accent-rgb), .35); border-radius: 3px; background: rgba(var(--accent-rgb), .08); transition: color .3s, border-color .3s, background .3s, box-shadow .3s; }
+  .footer-bar .repo-link b { color: var(--accent); font-weight: 900; animation: starTwinkle 2.4s ease-in-out infinite; }
+  .footer-bar .repo-link:hover { color: #fff; border-color: var(--accent); background: rgba(var(--accent-rgb), .18); box-shadow: 0 0 18px rgba(var(--accent-rgb), .35); }
+  @keyframes starTwinkle { 0%, 100% { opacity: .55; transform: scale(1); } 50% { opacity: 1; transform: scale(1.25); } }
 
   .final-overlay,
   .phase-impact { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; pointer-events: none; }
@@ -683,7 +685,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <footer class="footer-bar">
     <span><strong>LIVE</strong> // OPENAI REPLY MONITORING SYSTEM</span>
-    <span>Pro 5x 不會自己長出來 // <a class="repo-link" href="https://github.com/Sean-Hawks/hackathon2026" target="_blank" rel="noopener">等信無聊的話，一人一顆星星支持 ★</a></span>
+    <span>Pro 5x 不會自己長出來 // <a class="repo-link" href="https://github.com/Sean-Hawks/hackathon2026" target="_blank" rel="noopener"><b>★</b>等信無聊的話，來 GitHub 一人一顆星星支持</a></span>
   </footer>
 </main>
 
