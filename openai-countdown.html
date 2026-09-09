@@ -649,7 +649,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <div class="dashboard">
     <section class="stage">
-      <div class="eyebrow">INBOX STATUS // 已讀不回</div>
+      <div class="eyebrow" id="eyebrow">INBOX STATUS // 已讀不回</div>
       <h1 id="pageTitle"><span class="accent" id="eventName">OpenAI 沒回信</span><em>已經過了</em></h1>
       <div class="target-time"><b id="targetText">2026.09.01 MON // 00:00 // GMT+8</b></div>
 
@@ -668,7 +668,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
       </div>
 
-      <div class="done-msg">OpenAI 回信了！！！</div>
+      <div class="done-msg" id="doneMsg">GPT Pro 5x 發了！！！</div>
     </section>
 
     <a class="submit-panel" id="qrCard" href="#" target="_blank" rel="noopener">
@@ -2998,22 +2998,31 @@ var qrcode = function() {
 </script>
 
 <script>
-/* 可用網址參數暫時覆蓋設定：?title=標題&sent=ISO時間&url=連結&replied=ISO時間（OpenAI 回信的時間，填了就停止計時） */
+/* 可用網址參數暫時覆蓋設定：
+   ?title=標題  ?sent=ISO時間（起算）  ?url=連結
+   ?replied=true 或 ISO時間 → OpenAI 已回信但 GPT Pro 還沒發，計時繼續（給時間會顯示回信日期）
+   ?delivered=ISO時間     → GPT Pro 真的發了，停止計時並顯示完成畫面 */
 const CONFIG = {
-  title:   'OpenAI 沒回信',
-  sent:    '2026-09-01T00:00:00+08:00',
-  url:     'https://help.openai.com/',
-  replied: null
+  title:        'OpenAI 沒回信',
+  titleReplied: 'GPT Pro 還沒發',
+  sent:         '2026-09-01T00:00:00+08:00',
+  url:          'https://help.openai.com/',
+  replied:      'true',
+  delivered:    null
 };
 
 (() => {
   const q = new URLSearchParams(location.search);
-  const title = q.get('title') ?? CONFIG.title;
   const sentStr = q.get('sent') ?? CONFIG.sent;
   const formUrl = q.get('url') ?? CONFIG.url;
   const repliedStr = q.get('replied') ?? CONFIG.replied;
+  const deliveredStr = q.get('delivered') ?? CONFIG.delivered;
   const sentAt = new Date(sentStr).getTime();
-  const repliedAt = repliedStr ? new Date(repliedStr).getTime() : null;
+  const replied = !!repliedStr && !['false', '0', 'no'].includes(repliedStr.toLowerCase());
+  const repliedAt = replied && !['true', '1', 'yes'].includes(repliedStr.toLowerCase()) && !isNaN(Date.parse(repliedStr))
+    ? new Date(repliedStr).getTime() : null;
+  const deliveredAt = deliveredStr ? new Date(deliveredStr).getTime() : null;
+  const title = q.get('title') ?? (replied ? CONFIG.titleReplied : CONFIG.title);
 
   const sentParts = Object.fromEntries(
     new Intl.DateTimeFormat('en-US', {
@@ -3023,9 +3032,22 @@ const CONFIG = {
   );
 
   document.getElementById('eventName').textContent = title;
-  document.title = `${title}已經過了｜ChatGPT Pro 5x 已讀不回計時器`;
+  document.title = `${title}已經過了｜ChatGPT Pro 5x ${replied ? '已回不發' : '已讀不回'}計時器`;
+  document.getElementById('eyebrow').textContent = replied ? 'INBOX STATUS // 已回不發' : 'INBOX STATUS // 已讀不回';
+  let repliedNote = '';
+  if (replied) {
+    if (repliedAt !== null) {
+      const rp = Object.fromEntries(
+        new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Taipei', month: '2-digit', day: '2-digit' })
+          .formatToParts(new Date(repliedAt)).map(({ type, value }) => [type, value])
+      );
+      repliedNote = ` → ${rp.month}.${rp.day} OpenAI 回信`;
+    } else {
+      repliedNote = ' → OpenAI 已回信，Pro 未發';
+    }
+  }
   document.getElementById('targetText').textContent =
-    `${sentParts.year}.${sentParts.month}.${sentParts.day} ${sentParts.weekday.toUpperCase()} // ${sentParts.hour}:${sentParts.minute} // GMT+8 // 名單送出`;
+    `${sentParts.year}.${sentParts.month}.${sentParts.day} ${sentParts.weekday.toUpperCase()} // ${sentParts.hour}:${sentParts.minute} // GMT+8 // 名單送出${repliedNote}`;
   document.getElementById('formUrlText').textContent = formUrl.replace(/^https?:\/\//, '').replace(/\/$/, '');
   document.getElementById('qrCard').href = formUrl;
 
@@ -3082,7 +3104,15 @@ const CONFIG = {
     'u-min10': ['等待時間比黑客松還長', '主辦方在催、SITCON 在催、大家一起催'],
     'u-min':   ['等了 5 天，比賽都要結束了', 'ChatGPT Pro 5x 目前實測為 Pro 0x'],
     'u-final': ['整整一週，正式進入冷處理', '建議正名 ClosedAI，Sam 你在嗎'],
-    'done':    ['OpenAI 回信了！！！', '請大家冷靜，先確認不是釣魚信']
+    'done':    ['GPT Pro 5x 發了！！！', '請大家冷靜，先確認帳號真的升級了']
+  };
+  const REPLIED_TITLE = 'OpenAI 回信了，但 GPT Pro 還沒發';
+  const REPLIED_NOTE = {
+    '':        '從已讀不回進化成已回不發',
+    'u-hours': '信有了，Pro 沒有，這叫回信不辦事',
+    'u-min10': '回信只要一封，發放要等幾天？',
+    'u-min':   days => `總共等了 ${days} 天，Pro 5x 目前仍是 Pro 0x`,
+    'u-final': '回信了也沒用，GPT Pro 依然是薛丁格的 Pro'
   };
   const SIGNAL_COPY = {
     '': 'AWAITING OPENAI RESPONSE',
@@ -3090,15 +3120,17 @@ const CONFIG = {
     'u-min10': 'ESCALATION REQUESTED',
     'u-min': 'PRO 5X STATUS: 0X',
     'u-final': 'CLOSEDAI MODE',
-    'done': 'REPLY RECEIVED'
+    'done': 'PRO DELIVERED'
   };
+  const REPLIED_SIGNAL = 'REPLIED // PRO NOT DELIVERED';
   const ALERT_COPY = {
     'u-hours': 'DAY 3 // OpenAI 尚未回信 // 客服 SLA 已超時 // Pro 5x 名單持續等待中 //',
     'u-min10': 'DAY 4 // OpenAI 依然沒回信 // 等待時間已超過黑客松 // 掃描 QR CODE 一起催 //',
     'u-min': 'DAY 5 // Pro 5x 實測 Pro 0x // 比賽快結束了 // Sam Altman 請查收信箱 //',
     'u-final': 'DAY 7+ // CLOSEDAI MODE // 已讀不回滿一週 // 我們還在 //',
-    'done': 'REPLY RECEIVED // OpenAI 回信了 // Pro 5x 有望 // 請確認不是釣魚信 //'
+    'done': 'PRO DELIVERED // GPT Pro 5x 到貨 // 感謝 OpenAI（？） // 請確認帳號已升級 //'
   };
+  const REPLIED_ALERT = days => `REPLIED // OpenAI 回信了 // 但 GPT Pro 5x 還沒發 // 已回不發模式 // DAY ${days} //`;
   const MILESTONES = [
     { at: 1, text: '第 1 天 // 應該只是時差吧' },
     { at: 2, text: '第 2 天 // 可能在忙 GPT-6' },
@@ -3148,15 +3180,24 @@ const CONFIG = {
   }
 
   function setPhaseCopy(phase, daysElapsed) {
-    const [title, note] = PHASE_COPY[phase];
+    let [title, note] = PHASE_COPY[phase];
+    let signal = SIGNAL_COPY[phase];
+    let alert = ALERT_COPY[phase];
+    if (replied && phase !== 'done') {
+      title = REPLIED_TITLE;
+      const n = REPLIED_NOTE[phase];
+      note = typeof n === 'function' ? n(daysElapsed) : n;
+      signal = REPLIED_SIGNAL;
+      alert = REPLIED_ALERT(daysElapsed);
+    }
     const reached = [...phaseSteps].filter(step => daysElapsed >= Number(step.dataset.at)).length;
     phaseTextEl.textContent = title;
     phaseNoteEl.textContent = note;
-    signalLabelEl.textContent = SIGNAL_COPY[phase];
+    signalLabelEl.textContent = signal;
     phaseFillEl.style.setProperty('--phase-progress', (8 + reached / phaseSteps.length * 92) + '%');
     phaseSteps.forEach(step => step.classList.toggle('active', daysElapsed >= Number(step.dataset.at)));
-    if (ALERT_COPY[phase]) {
-      alertTextEls.forEach(el => { el.textContent = ALERT_COPY[phase]; });
+    if (alert) {
+      alertTextEls.forEach(el => { el.textContent = alert; });
     }
   }
 
@@ -3194,15 +3235,15 @@ const CONFIG = {
 
   function render() {
     const now = Date.now();
-    if (repliedAt !== null && now >= repliedAt) {
+    if (deliveredAt !== null && now >= deliveredAt) {
       if (!finished) {
         finished = true;
         PHASES.forEach(c => document.body.classList.remove(c));
         document.body.classList.add('done');
-        renderDigits(Math.max(0, repliedAt - sentAt));
+        renderDigits(Math.max(0, deliveredAt - sentAt));
         finalOverlay.classList.remove('go');
-        setPhaseCopy('done', Math.floor((repliedAt - sentAt) / DAY));
-        showImpact('OpenAI 回信了！！！');
+        setPhaseCopy('done', Math.floor((deliveredAt - sentAt) / DAY));
+        showImpact('GPT Pro 5x 發了！！！');
       }
       return;
     }

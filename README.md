@@ -1,5 +1,5 @@
 <h1 align="center">OpenAI 已讀不回計時器</h1>
-<p align="center"><b>ChatGPT Pro 5x 名單送出之後，OpenAI 已經多久沒回信了？</b></p>
+<p align="center"><b>ChatGPT Pro 5x 名單送出之後，OpenAI 回信了，但 Pro 到底什麼時候發？</b></p>
 <p align="center">
   <a href="https://openai-reply.observe.tw/"><b>openai-reply.observe.tw</b></a> ·
   <a href="https://sean-hawks.github.io/hackathon2026/openai-countdown.html">GitHub Pages 備援</a> ·
@@ -12,7 +12,7 @@
 
 ## 這是什麼
 
-一個單檔、無框架的靜態網頁，從 **2026 年 9 月 1 日 00:00（GMT+8）** 開始往上數，即時顯示 BUILD MODE GEN-AI HACKATHON 2026 參賽者等待 OpenAI 回覆 **ChatGPT Pro 5x** 開發資源的時間。等得越久，畫面越紅、動畫越急、文案越不客氣。
+一個單檔、無框架的靜態網頁，從 **2026 年 9 月 1 日 00:00（GMT+8）** 開始往上數，即時顯示 BUILD MODE GEN-AI HACKATHON 2026 參賽者等待 OpenAI 發放 **ChatGPT Pro 5x** 開發資源的時間。回信之前叫「已讀不回」，回信之後 Pro 還沒到，叫「已回不發」。等得越久，畫面越紅、動畫越急、文案越不客氣。
 
 頁面以 SITCON 開源的 [作品繳交截止倒數頁](https://hackathon2026.sitcon.org/countdown.html) 為基底改造：主視覺由青綠改為紅色，倒數改為正數，所有文案換成 Pro 5x 主題。除了新增的頁面與部署設定，**SITCON 原始檔案一律未動**。
 
@@ -26,6 +26,7 @@
 | 9/2 | 工作人員表示相關問題正在與 OpenAI 確認，「他們回覆比較慢」 |
 | 9/4 | 黑客松第一天，Pro 5x 尚未發放；OpenAI 原訂議程講者亦未出席 |
 | 9/5 | 工作人員說明名單已於 8/31 送出，至今未收到任何回覆，無法承諾發放時間 |
+| 9/9 | OpenAI 終於回信了，但 GPT Pro 5x 仍未發放。頁面進入「已回不發」模式，計時繼續 |
 
 本頁面把「還要等多久」變成一個大家看得到的數字。起算點取名單送出隔日的 00:00，屬於保守估計。
 
@@ -39,7 +40,12 @@
 | ≥ 5 天 | 等了 5 天，比賽都要結束了（Pro 5x 實測 Pro 0x） | 心跳式暈影、邊緣閃光 |
 | ≥ 7 天 | 整整一週，正式進入冷處理（ClosedAI 模式） | 標題 glitch，全速動畫 |
 
-跨過 1、2、3、4、5、6、7、10、14 天門檻時會跳出全螢幕彈幕。OpenAI 真的回信時，加上 `?replied=` 參數即可凍結計時並切換成「OpenAI 回信了！！！」畫面。
+跨過 1、2、3、4、5、6、7、10、14 天門檻時會跳出全螢幕彈幕。
+
+頁面另有兩個狀態切換：
+
+- **已回不發**（目前狀態）：OpenAI 回信了，但 Pro 還沒發。主標改為「GPT Pro 還沒發」，狀態列顯示 REPLIED // PRO NOT DELIVERED，計時繼續往上數。
+- **到貨**：GPT Pro 真的發下來時，加上 `?delivered=` 參數即可凍結計時，切換成「GPT Pro 5x 發了！！！」完成畫面。
 
 ## 網址參數
 
@@ -47,7 +53,8 @@
 
 | 參數 | 說明 | 範例 |
 |---|---|---|
-| `replied` | OpenAI 回信時間（ISO 8601）。填了會停止計時並顯示完成畫面 | `?replied=2026-09-06T10:00:00%2B08:00` |
+| `replied` | OpenAI 是否已回信。`true` 進入已回不發模式；給 ISO 8601 時間則會一併顯示回信日期；`false` 可切回已讀不回模式 | `?replied=2026-09-09T10:00:00%2B08:00` |
+| `delivered` | GPT Pro 實際發放時間（ISO 8601）。填了會停止計時並顯示到貨畫面 | `?delivered=2026-09-10T10:00:00%2B08:00` |
 | `sent` | 覆蓋起算時間 | `?sent=2026-08-31T18:00:00%2B08:00` |
 | `title` | 覆蓋主標紅字 | `?title=Sam%20沒回信` |
 | `url` | 覆蓋右側 QR code 與按鈕連結 | `?url=https://help.openai.com/` |
@@ -91,4 +98,4 @@ python3 serve.py
 
 ## 支持
 
-覺得好笑或有共鳴的話，[給一顆星星](https://github.com/Sean-Hawks/hackathon2026/stargazers) 就是最好的支持。OpenAI 回信那天，這個數字會停下來，星星不會。
+覺得好笑或有共鳴的話，[給一顆星星](https://github.com/Sean-Hawks/hackathon2026/stargazers) 就是最好的支持。GPT Pro 到貨那天，這個數字會停下來，星星不會。
