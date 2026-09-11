@@ -1,5 +1,5 @@
 <h1 align="center">OpenAI 已讀不回計時器</h1>
-<p align="center"><b>ChatGPT Pro 5x 名單送出之後，OpenAI 回信了，但 Pro 到底什麼時候發？</b></p>
+<p align="center"><b>ChatGPT Pro 5x 到貨了。從名單送出到帳號升級，總共等了 10 天 23 小時 34 分。</b></p>
 <p align="center">
   <a href="https://openai-reply.observe.tw/"><b>openai-reply.observe.tw</b></a> ·
   <a href="https://sean-hawks.github.io/hackathon2026/openai-countdown.html">GitHub Pages 備援</a> ·
@@ -27,6 +27,7 @@
 | 9/4 | 黑客松第一天，Pro 5x 尚未發放；OpenAI 原訂議程講者亦未出席 |
 | 9/5 | 工作人員說明名單已於 8/31 送出，至今未收到任何回覆，無法承諾發放時間 |
 | 9/9 | OpenAI 終於回信了，但 GPT Pro 5x 仍未發放。頁面進入「已回不發」模式，計時繼續 |
+| 9/11 23:34 | **GPT Pro 5x 到貨。** 計時凍結在 10 天 23 小時 34 分，頁面切換成到貨畫面 |
 
 本頁面把「還要等多久」變成一個大家看得到的數字。起算點取名單送出隔日的 00:00，屬於保守估計。
 
@@ -44,8 +45,8 @@
 
 頁面另有兩個狀態切換：
 
-- **已回不發**（目前狀態）：OpenAI 回信了，但 Pro 還沒發。主標改為「GPT Pro 還沒發」，狀態列顯示 REPLIED // PRO NOT DELIVERED，計時繼續往上數。
-- **到貨**：GPT Pro 真的發下來時，加上 `?delivered=` 參數即可凍結計時，切換成「GPT Pro 5x 發了！！！」完成畫面。
+- **已回不發**：OpenAI 回信了，但 Pro 還沒發。主標改為「GPT Pro 還沒發」，狀態列顯示 REPLIED // PRO NOT DELIVERED，計時繼續往上數。
+- **到貨**（目前狀態）：計時凍結在 2026/09/11 23:34，全螢幕顯示「GPT Pro 5x 發了！！！」，QR code 改指向 chatgpt.com。想回頭看等待中的樣子，加上 `?delivered=false` 或 `?delivered=2099-01-01` 即可。
 
 ## 網址參數
 
@@ -54,10 +55,10 @@
 | 參數 | 說明 | 範例 |
 |---|---|---|
 | `replied` | OpenAI 是否已回信。`true` 進入已回不發模式；給 ISO 8601 時間則會一併顯示回信日期；`false` 可切回已讀不回模式 | `?replied=2026-09-09T10:00:00%2B08:00` |
-| `delivered` | GPT Pro 實際發放時間（ISO 8601）。填了會停止計時並顯示到貨畫面 | `?delivered=2026-09-10T10:00:00%2B08:00` |
+| `delivered` | GPT Pro 實際發放時間（ISO 8601）。預設為 2026-09-11 23:34；給未來時間可暫時回到計時中的畫面 | `?delivered=2099-01-01T00:00:00%2B08:00` |
 | `sent` | 覆蓋起算時間 | `?sent=2026-08-31T18:00:00%2B08:00` |
 | `title` | 覆蓋主標紅字 | `?title=Sam%20沒回信` |
-| `url` | 覆蓋右側 QR code 與按鈕連結 | `?url=https://help.openai.com/` |
+| `url` | 覆蓋右側 QR code 與按鈕連結（到貨後預設為 chatgpt.com） | `?url=https://help.openai.com/` |
 
 > 網址中的 `+` 需寫成 `%2B`，否則會被當成空格。
 
@@ -98,4 +99,4 @@ python3 serve.py
 
 ## 支持
 
-覺得好笑或有共鳴的話，[給一顆星星](https://github.com/Sean-Hawks/hackathon2026/stargazers) 就是最好的支持。GPT Pro 到貨那天，這個數字會停下來，星星不會。
+覺得好笑或有共鳴的話，[給一顆星星](https://github.com/Sean-Hawks/hackathon2026/stargazers) 就是最好的支持。數字已經在 9/11 23:34 停下來了，星星還可以繼續。

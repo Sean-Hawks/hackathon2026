@@ -525,7 +525,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   }
 
   body.done .done-msg { display: block; animation: cellPulse .75s ease-in-out infinite; }
-  body.done .countdown { opacity: .3; filter: grayscale(.7); }
+  body.done .countdown { opacity: .9; }
 
   .footer-bar { color: rgba(255, 255, 255, .28); font-family: "SFMono-Regular", Consolas, monospace; font-size: 9px; letter-spacing: .22em; }
   .footer-bar strong { color: var(--accent); font-weight: 900; }
@@ -3007,14 +3007,14 @@ const CONFIG = {
   titleReplied: 'GPT Pro 還沒發',
   sent:         '2026-09-01T00:00:00+08:00',
   url:          'https://help.openai.com/',
+  urlDelivered: 'https://chatgpt.com/',
   replied:      'true',
-  delivered:    null
+  delivered:    '2026-09-11T23:34:00+08:00'
 };
 
 (() => {
   const q = new URLSearchParams(location.search);
   const sentStr = q.get('sent') ?? CONFIG.sent;
-  const formUrl = q.get('url') ?? CONFIG.url;
   const repliedStr = q.get('replied') ?? CONFIG.replied;
   const deliveredStr = q.get('delivered') ?? CONFIG.delivered;
   const sentAt = new Date(sentStr).getTime();
@@ -3022,7 +3022,17 @@ const CONFIG = {
   const repliedAt = replied && !['true', '1', 'yes'].includes(repliedStr.toLowerCase()) && !isNaN(Date.parse(repliedStr))
     ? new Date(repliedStr).getTime() : null;
   const deliveredAt = deliveredStr ? new Date(deliveredStr).getTime() : null;
-  const title = q.get('title') ?? (replied ? CONFIG.titleReplied : CONFIG.title);
+  const isDelivered = deliveredAt !== null && Date.now() >= deliveredAt;
+  const formUrl = q.get('url') ?? (isDelivered ? CONFIG.urlDelivered : CONFIG.url);
+  if (isDelivered) {
+    const [k1, k2] = document.querySelectorAll('.submit-kicker span');
+    k1.textContent = 'GO BUILD'; k2.textContent = 'SCAN // USE';
+    document.querySelector('.qr-text small').textContent = 'GPT Pro 5x 到貨';
+    document.querySelector('.qr-text strong').textContent = '掃描去用 Pro';
+    document.querySelector('.submit-cta span').textContent = '去用 GPT Pro';
+    document.getElementById('eyebrow').textContent = 'INBOX STATUS // 到貨';
+  }
+  const title = q.get('title') ?? (isDelivered ? 'GPT Pro 5x 到貨' : replied ? CONFIG.titleReplied : CONFIG.title);
 
   const sentParts = Object.fromEntries(
     new Intl.DateTimeFormat('en-US', {
@@ -3032,8 +3042,8 @@ const CONFIG = {
   );
 
   document.getElementById('eventName').textContent = title;
-  document.title = `${title}已經過了｜ChatGPT Pro 5x ${replied ? '已回不發' : '已讀不回'}計時器`;
-  document.getElementById('eyebrow').textContent = replied ? 'INBOX STATUS // 已回不發' : 'INBOX STATUS // 已讀不回';
+  document.title = isDelivered ? '總共等了 10 天 23 小時 34 分｜ChatGPT Pro 5x 到貨' : `${title}已經過了｜ChatGPT Pro 5x ${replied ? '已回不發' : '已讀不回'}計時器`;
+  if (!isDelivered) document.getElementById('eyebrow').textContent = replied ? 'INBOX STATUS // 已回不發' : 'INBOX STATUS // 已讀不回';
   let repliedNote = '';
   if (replied) {
     if (repliedAt !== null) {
@@ -3043,7 +3053,7 @@ const CONFIG = {
       );
       repliedNote = ` → ${rp.month}.${rp.day} OpenAI 回信`;
     } else {
-      repliedNote = ' → OpenAI 已回信，Pro 未發';
+      repliedNote = isDelivered ? ' → 09.11 23:34 GPT Pro 到貨' : ' → OpenAI 已回信，Pro 未發';
     }
   }
   document.getElementById('targetText').textContent =
@@ -3104,7 +3114,7 @@ const CONFIG = {
     'u-min10': ['等待時間比黑客松還長', '主辦方在催、SITCON 在催、大家一起催'],
     'u-min':   ['等了 5 天，比賽都要結束了', 'ChatGPT Pro 5x 目前實測為 Pro 0x'],
     'u-final': ['整整一週，正式進入冷處理', '建議正名 ClosedAI，Sam 你在嗎'],
-    'done':    ['GPT Pro 5x 發了！！！', '請大家冷靜，先確認帳號真的升級了']
+    'done':    ['GPT Pro 5x 發了！！！', days => `總共等了 ${days} 天 // 請大家冷靜，先確認帳號真的升級了`]
   };
   const REPLIED_TITLE = 'OpenAI 回信了，但 GPT Pro 還沒發';
   const REPLIED_NOTE = {
@@ -3181,6 +3191,7 @@ const CONFIG = {
 
   function setPhaseCopy(phase, daysElapsed) {
     let [title, note] = PHASE_COPY[phase];
+    if (typeof note === 'function') note = note(daysElapsed);
     let signal = SIGNAL_COPY[phase];
     let alert = ALERT_COPY[phase];
     if (replied && phase !== 'done') {
