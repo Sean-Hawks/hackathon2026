@@ -72,6 +72,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   body.u-final { --tempo: .9s; --pulse: .42s; --ticker: 4s; --spark-opacity: 1; }
 
+  /* 到貨紀念版：綠燈、慢節奏 */
+  body.done {
+    --accent: #3dff8a;
+    --accent-rgb: 61, 255, 138;
+    --line: rgba(61, 255, 138, .32);
+    --tempo: 14s;
+    --pulse: 3.6s;
+    --ticker: 26s;
+    --spark-opacity: .22;
+    background: #030a05;
+  }
+  body.done .backdrop { background: radial-gradient(circle at 52% 42%, #0a2a16 0, #06140b 43%, #030a05 76%); }
+  body.done .vignette { opacity: .35; background: radial-gradient(ellipse at center, transparent 48%, rgba(20, 120, 60, .35) 100%); animation: none; }
+  body.done h1 { animation: none; }
+
   .backdrop,
   .backdrop > div,
   .vignette,
@@ -199,7 +214,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   }
 
   .alarm-flash { z-index: 10; opacity: 0; background: rgba(255, 0, 35, .16); }
-  body.done .alarm-flash { animation: alarmFlash .75s linear infinite; }
+  body.done .alarm-flash { animation: none; }
 
   .shell {
     position: relative;
@@ -524,7 +539,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     text-shadow: 0 0 28px rgba(var(--accent-rgb), .7);
   }
 
-  body.done .done-msg { display: block; animation: cellPulse .75s ease-in-out infinite; }
+  body.done .done-msg { display: block; animation: cellPulse 3s ease-in-out infinite; }
   body.done .countdown { opacity: .9; }
 
   .footer-bar { color: rgba(255, 255, 255, .28); font-family: "SFMono-Regular", Consolas, monospace; font-size: 9px; letter-spacing: .22em; }
@@ -3030,7 +3045,8 @@ const CONFIG = {
     document.querySelector('.qr-text small').textContent = 'GPT Pro 5x 到貨';
     document.querySelector('.qr-text strong').textContent = '掃描去用 Pro';
     document.querySelector('.submit-cta span').textContent = '去用 GPT Pro';
-    document.getElementById('eyebrow').textContent = 'INBOX STATUS // 到貨';
+    document.getElementById('eyebrow').textContent = 'ARCHIVE // 到貨紀念';
+    document.querySelector('.footer-bar strong').textContent = 'ARCHIVED';
   }
   const title = q.get('title') ?? (isDelivered ? 'GPT Pro 5x 到貨' : replied ? CONFIG.titleReplied : CONFIG.title);
 
@@ -3114,7 +3130,7 @@ const CONFIG = {
     'u-min10': ['等待時間比黑客松還長', '主辦方在催、SITCON 在催、大家一起催'],
     'u-min':   ['等了 5 天，比賽都要結束了', 'ChatGPT Pro 5x 目前實測為 Pro 0x'],
     'u-final': ['整整一週，正式進入冷處理', '建議正名 ClosedAI，Sam 你在嗎'],
-    'done':    ['GPT Pro 5x 發了！！！', days => `總共等了 ${days} 天 // 請大家冷靜，先確認帳號真的升級了`]
+    'done':    ['GPT Pro 5x 到貨紀念', days => `總共等了 ${days} 天 23 小時 34 分 // 本頁保留為紀念，感謝所有一起等的人`]
   };
   const REPLIED_TITLE = 'OpenAI 回信了，但 GPT Pro 還沒發';
   const REPLIED_NOTE = {
@@ -3138,7 +3154,7 @@ const CONFIG = {
     'u-min10': 'DAY 4 // OpenAI 依然沒回信 // 等待時間已超過黑客松 // 掃描 QR CODE 一起催 //',
     'u-min': 'DAY 5 // Pro 5x 實測 Pro 0x // 比賽快結束了 // Sam Altman 請查收信箱 //',
     'u-final': 'DAY 7+ // CLOSEDAI MODE // 已讀不回滿一週 // 我們還在 //',
-    'done': 'PRO DELIVERED // GPT Pro 5x 到貨 // 感謝 OpenAI（？） // 請確認帳號已升級 //'
+    'done': 'PRO DELIVERED // 2026.09.11 23:34 GPT Pro 5x 到貨 // 總共等了 10 天 23 小時 34 分 // 感謝所有一起等的人 //'
   };
   const REPLIED_ALERT = days => `REPLIED // OpenAI 回信了 // 但 GPT Pro 5x 還沒發 // 已回不發模式 // DAY ${days} //`;
   const MILESTONES = [
@@ -3254,7 +3270,7 @@ const CONFIG = {
         renderDigits(Math.max(0, deliveredAt - sentAt));
         finalOverlay.classList.remove('go');
         setPhaseCopy('done', Math.floor((deliveredAt - sentAt) / DAY));
-        showImpact('GPT Pro 5x 發了！！！');
+        showImpact('GPT Pro 5x 到貨 // 10 天 23 小時 34 分');
       }
       return;
     }
